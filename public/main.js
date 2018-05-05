@@ -12,6 +12,7 @@ $(function() {
   var $usernameInput = $('.usernameInput'); // Input for username
   var $messages = $('.messages'); // Messages area
   var $inputMessage = $('.inputMessage'); // Input message input box
+    var $user_list = $('.list-group');
 
   var $loginPage = $('.login.page'); // The login page
   var $chatPage = $('.chat.page'); // The chatroom page
@@ -26,6 +27,23 @@ $(function() {
   var socket = io();
 
   const addParticipantsMessage = (data) => {
+    console.log("data", data);
+    console.log("username", username);
+    console.log("user_list", data.userList)
+    if (data.username){
+      for (var i = 1; i<data.numUsers; i++){
+          //$user_list.append('<li class="list-group-item">'+data.username+'</li>');
+      }
+    }
+    $user_list.empty()
+    for (var key in data.userList){
+        if (username!==data.userList[key]){
+            $user_list.append('<li class="list-group-item">'+data.userList[key]+'</li>');
+        }
+        else {
+            $user_list.append('<li class="list-group-item active">'+data.userList[key]+'</li>');
+        }
+    }
     var message = '';
     if (data.numUsers === 1) {
       message += "there's 1 participant";
@@ -38,6 +56,8 @@ $(function() {
   // Sets the client's username
   const setUsername = () => {
     username = cleanInput($usernameInput.val().trim());
+    $user_list.append('<li class="list-group-item active">'+username+'</li>');
+
 
     // If the username is valid
     if (username) {
@@ -229,7 +249,7 @@ $(function() {
   socket.on('login', (data) => {
     connected = true;
     // Display the welcome message
-    var message = "Welcome to Socket.IO Chat – ";
+    var message = "Welcome to Audio Chat ";
     log(message, {
       prepend: true
     });
