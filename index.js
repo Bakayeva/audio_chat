@@ -35,8 +35,6 @@ io.on('connection', (socket) => {
   });
 
   socket.on('new audio', (data)=>{
-    console.log("socket emit", data);
-    console.log("socket.username", socket.username);
     socket.emit('new audio', {
       username: socket.username,
       audioURL:data,
@@ -55,7 +53,9 @@ io.on('connection', (socket) => {
     // we store the username in the socket session for this client
     socket.username = username;
     ++numUsers;
+    console.log("USER_LIST1", user_list)
     user_list[username] = username
+    console.log("USER_LIST2", user_list)
     addedUser = true;
     socket.emit('login', {
       numUsers: numUsers,

@@ -104,13 +104,11 @@ $(function() {
           //$user_list.append('<li class="list-group-item">'+data.username+'</li>');
       }
     }
-    $user_list.empty()
+    $user_list.empty();
+    $user_list.append('<li class="list-group-item active">'+data.userList[username]+'</li>');
     for (var key in data.userList){
         if (username!==data.userList[key]){
             $user_list.append('<li class="list-group-item">'+data.userList[key]+'</li>');
-        }
-        else {
-            $user_list.append('<li class="list-group-item active">'+data.userList[key]+'</li>');
         }
     }
     var message = '';
@@ -372,7 +370,7 @@ $(function() {
 
   // Whenever the server emits 'typing', show the typing message
   socket.on('typing', (data) => {
-    addChatTyping(data);
+    //addChatTyping(data);
   });
 
   // Whenever the server emits 'stop typing', kill the typing message
