@@ -74,10 +74,7 @@ io.on('connection', (socket) => {
     if (addedUser) {
       --numUsers;
       var delete_name = socket.username
-        console.log("user_list1", user_list)
-        console.log("delete_name", delete_name)
       delete user_list[delete_name]
-        console.log("user_list2", user_list)
 
 
       // echo globally that this client has left
