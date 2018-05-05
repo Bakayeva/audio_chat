@@ -34,6 +34,20 @@ io.on('connection', (socket) => {
     });
   });
 
+  socket.on('new audio', (data)=>{
+    console.log("socket emit", data);
+    console.log("socket.username", socket.username);
+    socket.emit('new audio', {
+      username: socket.username,
+      audioURL:data,
+    });
+    socket.broadcast.emit('new audio', {
+        username: socket.username,
+        audioURL:data,
+    });
+  });
+
+
   // when the client emits 'add user', this listens and executes
   socket.on('add user', (username) => {
     if (addedUser) return;

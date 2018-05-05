@@ -72,7 +72,8 @@ $(function() {
                     chunks = [];
                     var audioURL = window.URL.createObjectURL(blob);
                     console.log("recorder stopped");
-                    $messages.append("<li><audio controls src="+audioURL+"/></li>");
+                    //$messages.append("<li><audio controls src="+audioURL+"/></li>");
+                    sendAudio(audioURL);
                 }
 
                 mediaRecorder.ondataavailable = function(e) {
@@ -155,12 +156,32 @@ $(function() {
       socket.emit('new message', message);
     }
   }
+  const sendAudio = (audioUrl)=>{
+    console.log("sendAudio", audioUrl)
+    if (audioUrl){
+        socket.emit('new audio', audioUrl);
+    }
+    }
 
   // Log a message
     const log = (message, options) => {
     var $el = $('<li>').addClass('log').text(message);
     addMessageElement($el, options);
   }
+
+  const addAudioRecord = (data, options)=>{
+    console.log("DATA", data);
+    //$messages.append("<li><audio controls src="+data.audioURL+"/></li>");
+    var $usernameDiv = $('<span class="username"/>')
+            .text(data.username)
+            .css('color', getUsernameColor(data.username));
+    var $messageBodyDiv = $("<span class='messageBody'><audio controls src="+data.audioURL+"/></span>");
+
+    var $messageDiv = $('<li class="message"/>')
+            .data('username', data.username)
+            .append($usernameDiv, $messageBodyDiv);
+    addMessageElement($messageDiv, options);
+    }
 
   // Adds the visual chat message to the message list
   const addChatMessage = (data, options) => {
@@ -207,6 +228,7 @@ $(function() {
   // options.prepend - If the element should prepend
   //   all other messages (default = false)
   const addMessageElement = (el, options) => {
+    console.log("ELL", el)
     var $el = $(el);
 
     // Setup default options
@@ -323,6 +345,11 @@ $(function() {
     });
     audioRecorder();
     addParticipantsMessage(data);
+  });
+
+  socket.on('new audio', (data)=>{
+    console.log("main socket on", data);
+    addAudioRecord(data);
   });
 
   // Whenever the server emits 'new message', update the chat body
